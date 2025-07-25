@@ -18,10 +18,7 @@ A comprehensive full-stack web application for managing child vaccination record
 - **Email Notifications**: Automated appointment confirmations and reminders
 - **Availability Checker**: Real-time vaccine availability and location finder
 
-## 🚀 Live Demo
 
-- **Frontend**: [https://vaccination-frontend.vercel.app](https://vaccination-frontend.vercel.app)
-- **Backend API**: [https://vaccination-backend.vercel.app](https://vaccination-backend.vercel.app)
 
 ## 🛠️ Tech Stack
 
