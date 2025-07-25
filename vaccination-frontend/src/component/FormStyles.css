@@ -1,0 +1,85 @@
+/* Full-page background */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: url('E:\mca 3rd sem\childvaccination\vaccinnation\vaccination-frontend\public\images\image.png'); /* ✅ Correct path for React public folder */
+  background-size: cover;
+  background-position: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Centering form container */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form box */
+.form-box {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Heading */
+.form-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.form-box input,
+.form-box select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Button */
+.form-box button {
+  width: 100%;
+  padding: 10px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-box button:hover {
+  background-color: #1565c0;
+}
+
+/* Link text (like: "Login here" / "Create account") */
+.link-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.link-text span {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-text span:hover {
+  color: #0d47a1;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
