@@ -22,9 +22,17 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store
@@ -34,3 +42,9 @@ lerna-debug.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Deployment
+.vercel
+
+# Misc
+.eslintcache

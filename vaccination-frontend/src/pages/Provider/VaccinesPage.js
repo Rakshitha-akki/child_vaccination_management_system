@@ -8,25 +8,34 @@ const VaccinesPage = () => {
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
+  // Use environment variable for API URL
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
+
   useEffect(() => {
     fetchVaccines();
   }, []);
 
-  const fetchVaccines = () => {
-    fetch("http://localhost:3000/api/vaccines/all")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        setVaccines(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch vaccines:", err.message);
-        alert("Backend error. Check console for details.");
-        setLoading(false);
+  const fetchVaccines = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/api/vaccines/all`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setVaccines(data);
+      setMessage(null);
+    } catch (err) {
+      console.error("Failed to fetch vaccines:", err.message);
+      setMessage({ 
+        type: "error", 
+        text: "Failed to load vaccines. Please check your connection and try again." 
       });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUpdate = async (id) => {
@@ -35,23 +44,41 @@ const VaccinesPage = () => {
       let location = "";
 
       if (!vaccine.availability) {
-        // Prompt for location when marking available
-        location = prompt("Enter the vaccine location (e.g., hospital or camp name):");
+        location = prompt(
+          "Enter the vaccine location (e.g., hospital name, clinic address):"
+        );
+        
         if (!location || location.trim() === "") {
-          alert("Update cancelled. Location is required when making vaccine available.");
+          setMessage({ 
+            type: "error", 
+            text: "Location is required when making vaccine available." 
+          });
+          setTimeout(() => setMessage(null), 3000);
           return;
         }
       }
 
-      await axios.put(`http://localhost:3000/api/vaccines/update/${id}`, { location });
-      setMessage({ type: "success", text: "Availability status toggled." });
-      fetchVaccines();
-    } catch (error) {
-      console.error("Update error:", error.message);
-      setMessage({ type: "error", text: "Update failed." });
-    }
+      const response = await axios.put(
+        `${API_BASE_URL}/api/vaccines/update/${id}`, 
+        { location: location.trim() }
+      );
 
-    setTimeout(() => setMessage(null), 3000);
+      if (response.status === 200) {
+        setMessage({ 
+          type: "success", 
+          text: `Vaccine ${vaccine.availability ? 'marked as unavailable' : 'marked as available'} successfully.` 
+        });
+        fetchVaccines();
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      setMessage({ 
+        type: "error", 
+        text: "Failed to update vaccine. Please try again." 
+      });
+    } finally {
+      setTimeout(() => setMessage(null), 5000);
+    }
   };
 
   const getStockColor = (availability) => {
@@ -118,8 +145,16 @@ const VaccinesPage = () => {
                 {vaccine.availability ? vaccine.location || "-" : "-"}
               </td>
               <td style={styles.td}>
-                <button onClick={() => handleUpdate(vaccine._id)} style={styles.button}>
-                  Update
+                <button 
+                  onClick={() => handleUpdate(vaccine._id)} 
+                  style={{
+                    ...styles.button,
+                    backgroundColor: vaccine.availability ? "#dc3545" : "#28a745",
+                    opacity: loading ? 0.6 : 1
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? "..." : vaccine.availability ? "Mark Unavailable" : "Mark Available"}
                 </button>
               </td>
             </tr>
